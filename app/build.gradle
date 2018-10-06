@@ -105,4 +105,8 @@ dependencies {
 
     compileOnly "frankiesardo:auto-parcel:1.0.3"
     kapt 'frankiesardo:auto-parcel:1.0.3'
+
+    def lifecycle_version = "1.1.1"
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 }

@@ -2,11 +2,11 @@ package com.kkopite.mvvmarchitecture.libs
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.content.Context
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.kkopite.mvvmarchitecture.IApplication
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.RxLifecycle
@@ -20,7 +20,10 @@ import timber.log.Timber
 /**
  * Created by kkopite on 2018/9/27.
  */
-public open class FragmentViewModel(application: Application, environment: Environment): AndroidViewModel(application), LifecycleProvider<FragmentEvent> {
+public open class FragmentViewModel(application: Application) : AndroidViewModel(application), LifecycleProvider<FragmentEvent> {
+
+    private var mEnvironment: Environment = (application as IApplication).component().environment()
+
     override fun <T : Any?> bindToLifecycle(): LifecycleTransformer<T> {
         return RxLifecycleAndroid.bindFragment(mLifecycleSubject)
     }
@@ -38,7 +41,7 @@ public open class FragmentViewModel(application: Application, environment: Envir
     private val arguments: PublishSubject<Bundle> = PublishSubject.create()
 
     @CallSuper
-    protected fun onCreate(context: Context, savedInstanceState: Bundle?) {
+    fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate %s", this.toString())
         mLifecycleSubject.onNext(FragmentEvent.CREATE)
     }
@@ -52,51 +55,51 @@ public open class FragmentViewModel(application: Application, environment: Envir
         }
     }
 
-    protected fun arguments(): Observable<Bundle> {
+    fun getArguments(): Observable<Bundle> {
         return this.arguments
     }
 
     @CallSuper
-    protected fun onResume() {
+    fun onResume() {
         Timber.d("onResume %s", this.toString())
         mLifecycleSubject.onNext(FragmentEvent.RESUME)
     }
 
     @CallSuper
-    protected fun onPause() {
+    fun onPause() {
         Timber.d("onPause %s", this.toString())
         mLifecycleSubject.onNext(FragmentEvent.RESUME)
     }
 
     @CallSuper
-    protected fun onDestroy() {
+    fun onDestroy() {
         Timber.d("onDestroy %s", this.toString())
         mLifecycleSubject.onNext(FragmentEvent.RESUME)
     }
 
     @CallSuper
-    protected fun onDetach() {
+    fun onDetach() {
         Timber.d("onDetach %s", this.toString())
         mLifecycleSubject.onNext(FragmentEvent.DETACH)
     }
 
     @CallSuper
-    protected fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) {
+    fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) {
         mLifecycleSubject.onNext(FragmentEvent.CREATE_VIEW)
     }
 
     @CallSuper
-    protected fun onStart() {
+    fun onStart() {
         mLifecycleSubject.onNext(FragmentEvent.START)
     }
 
     @CallSuper
-    protected fun onStop() {
+    fun onStop() {
         mLifecycleSubject.onNext(FragmentEvent.STOP)
     }
 
     @CallSuper
-    protected fun onDestroyView() {
+    fun onDestroyView() {
         mLifecycleSubject.onNext(FragmentEvent.DESTROY_VIEW)
     }
 

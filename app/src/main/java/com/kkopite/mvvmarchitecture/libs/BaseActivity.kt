@@ -1,7 +1,7 @@
 package com.kkopite.mvvmarchitecture.libs
 
 import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.AnimRes
@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Pair
 import com.kkopite.mvvmarchitecture.ApplicationComponent
 import com.kkopite.mvvmarchitecture.IApplication
+import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresActivityViewModel
 import com.kkopite.mvvmarchitecture.ui.data.ActivityResult
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 /**
  * Created by kkopite on 2018/9/27.
@@ -22,15 +24,15 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
 
 
     private val mBack: PublishSubject<Any> = PublishSubject.create()
-    private lateinit var mViewModel: ViewModelType
+    protected lateinit var mViewModel: ViewModelType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val annotation = this.javaClass.getAnnotation(RequiresActivityViewModel::class.java)
+        val kClass = annotation?.value as KClass<ViewModelType>
+        mViewModel = ViewModelProviders.of(this).get(kClass.java)
         mViewModel.onCreate(this, savedInstanceState)
-
-        mViewModel = ViewModelProvider.AndroidViewModelFactory(application).create(mViewModel.javaClass)
-
         mViewModel.intent(intent)
     }
 
@@ -51,6 +53,21 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
         mBack.bindUntilEvent(this, Lifecycle.Event.ON_STOP)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { goBack() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mViewModel.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mViewModel.onDestroy()
     }
 
     /**
@@ -88,11 +105,11 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
         overridePendingTransition(enterAnim, exitAnim)
     }
 
-    protected fun application(): IApplication {
+    fun application(): IApplication {
         return application as IApplication
     }
 
-    protected fun component(): ApplicationComponent {
+    private fun component(): ApplicationComponent {
         return application().component()
     }
 
@@ -108,7 +125,5 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
             overridePendingTransition(exitTransition.first, exitTransition.second)
         }
     }
-
-
 
 }

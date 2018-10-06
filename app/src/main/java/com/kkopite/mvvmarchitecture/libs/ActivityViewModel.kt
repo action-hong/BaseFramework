@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
+import com.kkopite.mvvmarchitecture.IApplication
 import com.kkopite.mvvmarchitecture.ui.data.ActivityResult
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
@@ -20,7 +21,7 @@ import timber.log.Timber
 /**
  * Created by kkopite on 2018/9/27.
  */
-public open class ActivityViewModel(application: Application, environment: Environment) : AndroidViewModel(application), LifecycleProvider<ActivityEvent> {
+open class ActivityViewModel(application: Application) : AndroidViewModel(application), LifecycleProvider<ActivityEvent> {
 
     private val mLifecycleSubject: BehaviorSubject<ActivityEvent> = BehaviorSubject.create()
 
@@ -29,11 +30,13 @@ public open class ActivityViewModel(application: Application, environment: Envir
 
     private val mIntent: PublishSubject<Intent> = PublishSubject.create()
 
-    public fun activityResult(activityResult: ActivityResult) {
+    private var mEnvironment: Environment = (application as IApplication).component().environment()
+
+    fun activityResult(activityResult: ActivityResult) {
         mActivityResult.onNext(activityResult)
     }
 
-    public fun intent(intent: Intent?) {
+    fun intent(intent: Intent?) {
         if (intent != null) {
             mIntent.onNext(intent)
         }
@@ -46,13 +49,13 @@ public open class ActivityViewModel(application: Application, environment: Envir
     }
 
     @CallSuper
-    protected fun onResume() {
+    fun onResume() {
         Timber.d("onResume %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.RESUME)
     }
 
     @CallSuper
-    protected fun onPause() {
+    fun onPause() {
         Timber.d("onPause %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.PAUSE)
     }
