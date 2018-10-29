@@ -34,9 +34,6 @@ class TestFragment : BaseFragment<MainViewModel.ViewModel, TestFragmentViewModel
             val text = edit_msg.text.toString()
             mShareViewModel.change(text)
         }
-
-
-
     }
 
 }

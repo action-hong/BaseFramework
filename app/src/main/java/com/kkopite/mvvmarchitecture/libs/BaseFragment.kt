@@ -24,10 +24,12 @@ open class BaseFragment<ShareViewModel: ActivityViewModel, viewModel: FragmentVi
         super.onCreate(savedInstanceState)
 
         val annotationShare = this.javaClass.getAnnotation(RequiresActivityViewModel::class.java)
+        @Suppress("UNCHECKED_CAST")
         val kClassShare = annotationShare?.value as KClass<ShareViewModel>
         mShareViewModel = ViewModelProviders.of(activity!!).get(kClassShare.java)
 
         val annotation = this.javaClass.getAnnotation(RequiresFragmentViewModel::class.java)
+        @Suppress("UNCHECKED_CAST")
         val kClass = annotation?.value as KClass<viewModel>
         mViewModel = ViewModelProviders.of(this).get(kClass.java)
 

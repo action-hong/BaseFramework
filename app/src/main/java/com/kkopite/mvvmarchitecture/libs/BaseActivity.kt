@@ -30,6 +30,7 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
         super.onCreate(savedInstanceState)
 
         val annotation = this.javaClass.getAnnotation(RequiresActivityViewModel::class.java)
+        @Suppress("UNCHECKED_CAST")
         val kClass = annotation?.value as KClass<ViewModelType>
         mViewModel = ViewModelProviders.of(this).get(kClass.java)
         mViewModel.onCreate(this, savedInstanceState)
@@ -53,6 +54,11 @@ public abstract class BaseActivity<ViewModelType: ActivityViewModel>: AppCompatA
         mBack.bindUntilEvent(this, Lifecycle.Event.ON_STOP)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { goBack() }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mViewModel.onStop()
     }
 
     override fun onResume() {

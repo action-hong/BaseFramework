@@ -43,29 +43,38 @@ open class ActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     @CallSuper
-    fun onCreate(context: Context, savedInstanceState: Bundle?) {
+    open fun onCreate(context: Context, savedInstanceState: Bundle?) {
         Timber.d("onCreate %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.CREATE)
     }
 
     @CallSuper
-    fun onResume() {
+    open fun onResume() {
         Timber.d("onResume %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.RESUME)
     }
 
     @CallSuper
-    fun onPause() {
+    open fun onPause() {
         Timber.d("onPause %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.PAUSE)
     }
 
     @CallSuper
-    fun onDestroy() {
+    open fun onDestroy() {
         Timber.d("onDestroy %s", this.toString())
         mLifecycleSubject.onNext(ActivityEvent.DESTROY)
     }
 
+    @CallSuper
+    open fun onStart() {
+        mLifecycleSubject.onNext(ActivityEvent.START)
+    }
+
+    @CallSuper
+    open fun onStop() {
+        mLifecycleSubject.onNext(ActivityEvent.STOP)
+    }
     protected fun activityResult(): Observable<ActivityResult> {
         return this.mActivityResult
     }
