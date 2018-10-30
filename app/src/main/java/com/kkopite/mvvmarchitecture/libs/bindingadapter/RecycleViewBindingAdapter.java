@@ -36,7 +36,7 @@ public class RecycleViewBindingAdapter {
                 super.onScrollStateChanged(recyclerView, newState);
                 state = newState;
                 if (onScrollStateChangedCommand != null) {
-                    onScrollChangeCommand.equals(newState);
+                    onScrollStateChangedCommand.execute(newState);
                 }
             }
         });
