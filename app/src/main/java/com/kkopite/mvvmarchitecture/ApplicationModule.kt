@@ -4,11 +4,12 @@ import android.app.Application
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kkopite.mvvmarchitecture.core.DataManager
+import com.kkopite.mvvmarchitecture.core.http.api.ApiService
 import com.kkopite.mvvmarchitecture.libs.ApiClient
 import com.kkopite.mvvmarchitecture.libs.ApiClientType
 import com.kkopite.mvvmarchitecture.libs.AutoParcelAdapterFactory
 import com.kkopite.mvvmarchitecture.libs.Environment
-import com.kkopite.mvvmarchitecture.services.ApiService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -35,8 +36,9 @@ public class ApplicationModule(private val application: Application) {
         @JvmStatic
         @Provides
         @Singleton
-        fun provideEnvironment(gson: Gson): Environment {
+        fun provideEnvironment(gson: Gson, dataManager: DataManager): Environment {
             return Environment.builder()
+                    .dataManager(dataManager)
                     .gson(gson)
                     .build()
         }
@@ -51,6 +53,11 @@ public class ApplicationModule(private val application: Application) {
                     .create()
 
         }
+
+        @JvmStatic
+        @Provides
+        @Singleton
+        fun provideDataManager(service: ApiService) = DataManager(service)
 
         @JvmStatic
         @Provides
@@ -78,7 +85,7 @@ public class ApplicationModule(private val application: Application) {
         @Provides
         @Singleton
         fun provideBaseUrl(): String {
-            return "https://api.robospace.cc/"
+            return "http://www.wanandroid.com/"
         }
 
         // todo: 添加一些拦截
