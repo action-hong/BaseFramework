@@ -22,7 +22,7 @@ import timber.log.Timber
  */
 public open class FragmentViewModel(application: Application) : AndroidViewModel(application), LifecycleProvider<FragmentEvent> {
 
-    private var mEnvironment: Environment = (application as IApplication).component().environment()
+    var mEnvironment: Environment = (application as IApplication).component().environment()
 
     override fun <T : Any?> bindToLifecycle(): LifecycleTransformer<T> {
         return RxLifecycleAndroid.bindFragment(mLifecycleSubject)

@@ -8,7 +8,7 @@
             type="com.kkopite.mvvmarchitecture.core.bean.test.User"/>
         <variable
             name="viewmodel"
-            type="com.kkopite.mvvmarchitecture.viewmodels.MainViewModel.ViewModel"/>
+            type="com.kkopite.mvvmarchitecture.viewmodels.TestLoadViewModel.ViewModel"/>
         <variable
             name="viewholder"
             type="android.support.v7.widget.RecyclerView.ViewHolder"/>

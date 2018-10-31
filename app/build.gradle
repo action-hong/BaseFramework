@@ -19,6 +19,7 @@ android {
                 includeCompileClasspath true
             }
         }
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -67,14 +68,13 @@ android {
     }
 
 
-
-
 }
 
 configurations.all {
     resolutionStrategy {
         force 'com.squareup.okio:okio:1.11.0'
         force "com.squareup.okhttp3:okhttp:3.5.0"
+        force 'com.android.support:support-v4:27.1.1'
     }
 }
 
@@ -82,13 +82,17 @@ apply from: 'dependencies.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation supportLibs
     implementation networkLibs
     implementation rxJavaLibs
     implementation otherLibs
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
+    implementation 'com.github.githubwing:ByeBurger:1.2.3'
     debugImplementation debugLibs
     releaseImplementation releaseLibs
 
@@ -120,4 +124,7 @@ dependencies {
 
     implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:2.3.0-beta3'
     implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:2.3.0-beta3'
+
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    implementation 'com.youth.banner:banner:1.4.10'
 }

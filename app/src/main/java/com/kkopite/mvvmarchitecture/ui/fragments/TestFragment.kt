@@ -10,13 +10,13 @@ import com.kkopite.mvvmarchitecture.R
 import com.kkopite.mvvmarchitecture.libs.BaseFragment
 import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresActivityViewModel
 import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresFragmentViewModel
-import com.kkopite.mvvmarchitecture.viewmodels.MainViewModel
+import com.kkopite.mvvmarchitecture.viewmodels.TestLoadViewModel
 import com.kkopite.mvvmarchitecture.viewmodels.TestFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_test.*
 
-@RequiresActivityViewModel(MainViewModel.ViewModel::class)
+@RequiresActivityViewModel(TestLoadViewModel.ViewModel::class)
 @RequiresFragmentViewModel(TestFragmentViewModel.ViewModel::class)
-class TestFragment : BaseFragment<MainViewModel.ViewModel, TestFragmentViewModel.ViewModel>() {
+class TestFragment : BaseFragment<TestLoadViewModel.ViewModel, TestFragmentViewModel.ViewModel>() {
 
  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
