@@ -1,5 +1,6 @@
 package com.kkopite.mvvmarchitecture.ui.fragments
 
+import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresActivityViewModel
 import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresFragmentViewModel
 import com.kkopite.mvvmarchitecture.viewmodels.MainViewModel
 import com.kkopite.mvvmarchitecture.viewmodels.MainPageFragmentViewModel
+import kotlinx.android.synthetic.main.fragment_mainpage.*
 
 @RequiresActivityViewModel(MainViewModel.ViewModel::class)
 @RequiresFragmentViewModel(MainPageFragmentViewModel.ViewModel::class)
@@ -28,6 +30,20 @@ class MainPageFragment : BaseFragment<MainViewModel.ViewModel, MainPageFragmentV
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mViewModel.autoRefresh()
+
+        srl.setEnableLoadMore(true)
+        srl.setOnLoadMoreListener {
+            mViewModel.initFeedArticleList()
+        }
+
+        mViewModel.mLoadMore.observe(this, Observer<Boolean> {
+            if (it == false) {
+                srl.finishLoadMore(2000)
+            }
+        })
+
+
+
     }
 
 }

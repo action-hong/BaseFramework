@@ -1,6 +1,7 @@
 package com.kkopite.mvvmarchitecture.viewmodels
 
 import android.app.Application
+import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import com.kkopite.mvvmarchitecture.BR
@@ -37,6 +38,9 @@ interface MainPageFragmentViewModel {
         val name = "hello world"
         private var mCurrentPage = 0
 
+        // load more, 监听, 为false的时候, 消失load more
+        val mLoadMore = MutableLiveData<Boolean>()
+
         // 文章数据
         val feedItems: ObservableList<FeedArticleData> = ObservableArrayList()
         val feedItemBinding: ItemBinding<FeedArticleData> = ItemBinding.of(BR.item, R.layout.item_search_pager)
@@ -51,7 +55,7 @@ interface MainPageFragmentViewModel {
 
         fun autoRefresh() {
             mCurrentPage = 0
-//            initBannerData()
+            initBannerData()
             initFeedArticleList()
         }
 
@@ -79,7 +83,8 @@ interface MainPageFragmentViewModel {
 
         }
 
-        private fun initFeedArticleList() {
+        fun initFeedArticleList() {
+            mLoadMore.value = true
             mEnvironment.dataManager()
                     .getFeedArticleList(mCurrentPage)
                     .execIOThenObserveOnMain()
@@ -87,6 +92,7 @@ interface MainPageFragmentViewModel {
                     .bindToLifecycle(this)
                     .subscribe(object : Observer<FeedArticleListData> {
                         override fun onComplete() {
+                            mLoadMore.value = false
                         }
 
                         override fun onSubscribe(d: Disposable) {
@@ -97,6 +103,7 @@ interface MainPageFragmentViewModel {
                                 feedItems.addAll(it)
                             }
                             Timber.d(t.datas?.toString())
+                            mCurrentPage++
                         }
 
                         override fun onError(e: Throwable) {

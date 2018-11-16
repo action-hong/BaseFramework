@@ -1,8 +1,10 @@
 package com.kkopite.mvvmarchitecture.ui.activities
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -12,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import com.kkopite.mvvmarchitecture.R
 import com.kkopite.mvvmarchitecture.app.Constants
-import com.kkopite.mvvmarchitecture.libs.BaseFragment
 import com.kkopite.mvvmarchitecture.libs.extension.fgTransaction
 import com.kkopite.mvvmarchitecture.libs.qualifiers.RequiresActivityViewModel
 import com.kkopite.mvvmarchitecture.libs.utils.disableShiftMode
@@ -21,7 +22,6 @@ import com.kkopite.mvvmarchitecture.ui.fragments.MainPageFragment
 import com.kkopite.mvvmarchitecture.ui.fragments.NavigationFragment
 import com.kkopite.mvvmarchitecture.ui.fragments.ProjectFragment
 import com.kkopite.mvvmarchitecture.viewmodels.MainViewModel
-import com.kkopite.mvvmarchitecture.viewmodels.NewsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -112,15 +111,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         supportFragmentManager.fgTransaction {
             val targetFg = mFragments[position]
-//            val lastFg = mFragments[mLastFgIndex]
+            val lastFg = mFragments[mLastFgIndex]
             mLastFgIndex = position
-            replace(R.id.fragment_group, targetFg)
-//            hide(lastFg)
-//            if (!targetFg.isAdded) {
-//                remove(targetFg)
-//                add(R.id.fragment_group, targetFg)
-//            }
-//            show(targetFg)
+//            replace(R.id.fragment_group, targetFg)
+            hide(lastFg)
+            if (!targetFg.isAdded) {
+                add(R.id.fragment_group, targetFg)
+            }
+            show(targetFg)
         }
     }
 
